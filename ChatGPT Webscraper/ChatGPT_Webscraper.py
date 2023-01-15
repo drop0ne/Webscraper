@@ -13,11 +13,19 @@ while True:
     if url.lower() == 'q':
         break
 
-    # Create a YouTube object using the URL
-    yt = pytube3.YouTube(url)
+    try:
+        # Create a YouTube object using the URL
+        yt = pytube3.YouTube(url)
+    except pytube3.exceptions.RegexMatchError:
+        print("Invalid URL, please try again.")
+        continue
 
-    # Get the highest quality video stream available with a resolution of 1440p or less
-    streams = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().filter(lambda stream: stream.resolution in ['1440p', '1080p', '720p', '480p', '360p', '240p'])
+    try:
+        # Get the highest quality video stream available with a resolution of 1440p or less
+        streams = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().filter(lambda stream: stream.resolution in ['1440p', '1080p', '720p', '480p', '360p', '240p'])
+    except pytube3.exceptions.VideoUnavailableError:
+        print("Video not available, please try another video.")
+        continue
 
     # Print available video qualities
     for i, stream in enumerate(streams):
