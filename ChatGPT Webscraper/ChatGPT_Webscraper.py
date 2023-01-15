@@ -1,4 +1,5 @@
 import pytube3
+import os
 
 def progress_function(stream, chunk, file_handle, bytes_remaining):
     # Calculate the percentage of the file that has been downloaded
@@ -28,6 +29,15 @@ stream = streams[choice - 1]
 
 # Get the size of the file in bytes
 file_size = stream.filesize
+
+# Ask the user for the download location
+download_path = input("Enter the download location (leave blank for current directory): ")
+
+if download_path:
+    if not os.path.exists(download_path):
+        os.makedirs(download_path)
+    else:
+        download_path = os.getcwd()
 
 # Set the progress function
 stream.on_progress(progress_function)
