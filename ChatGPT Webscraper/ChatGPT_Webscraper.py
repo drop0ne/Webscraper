@@ -12,8 +12,19 @@ url = input("Enter the YouTube video URL: ")
 # Create a YouTube object using the URL
 yt = pytube3.YouTube(url)
 
-# Get the highest quality video stream available with a resolution of 1080p or less
-stream = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+# Get the highest quality video stream available with a resolution of 1440p or less
+streams = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().filter(lambda stream: stream.resolution in ['1440p', '1080p', '720p', '480p', '360p', '240p'])
+
+
+# Print available video qualities
+for i, stream in enumerate(streams):
+    print(f'{i+1}. {stream.resolution}')
+
+# Ask the user to choose a video quality
+choice = int(input("Choose a video quality (1-6): "))
+
+# Get the selected stream
+stream = streams[choice - 1]
 
 # Get the size of the file in bytes
 file_size = stream.filesize
