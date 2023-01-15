@@ -36,10 +36,9 @@ while True:
     download_path = input("Enter the download location (leave blank for current directory): ")
 
     if download_path:
-        if not os.path.exists(download_path):
-            os.makedirs(download_path)
-        else:
-            download_path = os.getcwd()
+        os.makedirs(download_path, exist_ok=True)
+    else:
+        download_path = os.getcwd()
 
     # Set the progress function
     stream.on_progress(progress_function)
